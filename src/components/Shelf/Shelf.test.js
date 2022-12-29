@@ -1,11 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import Book from "./Book";
-import { update } from "../../BooksAPI";
+import Shelf from "./Shelf.tsx";
 
-
-describe("Book component", () => {
+describe("Search component", () => {
   const initialState = {
     books: {
       uncategorizedBooks: [],
@@ -16,27 +14,23 @@ describe("Book component", () => {
     },
   };
 
+  const read = [{}];
+
   const mockStore = configureStore();
   let store;
-  const book = {
-    imageLinks: {
-      thumbnail: '',
-    },
-  };
+  
 
-  test("select values", () => {
+  test("check that books is loaded", async () => {
 
     store = mockStore(initialState);
-    // const updateSpy = jest.spyOn(Book, 'update');
     
     render(
       <Provider store={store}>
-        <Book book={book} />
+        <Shelf shelfCategory="Read" books={read}/>
       </Provider>
     );
 
-    fireEvent.click(screen.getByText('Read'));     
-    // expect(updateSpy).toHaveBeenCalled();
-
+    const listItemElements = await screen.findAllByRole('listitem');
+    expect(listItemElements).not.toHaveLength(0);
   });
 });
